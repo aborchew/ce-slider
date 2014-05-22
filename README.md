@@ -1,1 +1,1 @@
-`git clone https://github.com/aborchew/angular-slider.git && cd angular-slider && npm install && bower install && grunt serve`
+`$ git clone https://github.com/aborchew/angular-slider.git && cd angular-slider && npm install && bower install && grunt serve`

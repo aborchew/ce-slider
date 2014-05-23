@@ -19,28 +19,41 @@ angular.module('ceSlider')
           var els = element.children().children();
           for(var i = 0, len = els.length; i < len; i++) {
             if(angular.element(els[i]).attr('drag-handle')) {
-              hndls[hndls.length] = (els[i]);
+              hndls[hndls.length] = angular.element(els[i]);
             }
           }
           return hndls;
         }();
 
         scope.container = angular.element(element.children()[0]);
-        scope.handle = angular.element(handles[0]);
+        scope.handle = handles[0];
         scope.minPossible = Math.min.apply(null, scope.data);
 
         if(scope.type != 'range') {
           scope.handleMax.remove();
         } else {
-          scope.handleMax = angular.element(handles[1]);
+          scope.handleMax = handles[1];
           scope.maxPossible = Math.max.apply(null, scope.data);
         }
+
+        var windowTimer;
+
+        function windowResize() {
+          clearTimeout(windowTimer);
+          windowTimer = setTimeout(function () {
+            for(var i = 0, len = handles.length; i < len; i++) {
+              handles[i].triggerHandler('updatePosition');
+            }
+          },250);
+        }
+
+        window.onresize = windowResize;
 
       }
     };
   })
   
-  .directive('dragHandle', function ($document) {
+  .directive('dragHandle', function ($document, $timeout) {
     return {
       restrict: 'A',
       scope: {
@@ -57,14 +70,31 @@ angular.module('ceSlider')
             left: '100%'
           });
           x = element[0].offsetLeft;
+          scope.model = 'modelMax';
+        } else {
+          scope.model = 'model';
         }
 
-        element.on('mousedown', function(event) {
+        function updatePosition () {
+          x = unCalcX(element.css('left').replace('%',''));
+          $document.triggerHandler('mousedown');
+          $document.triggerHandler('mousemove');
+          $document.triggerHandler('mouseup');
+        }
+
+        element.on('updatePosition', updatePosition);
+
+        element.on('mousedown', eventStart);
+        element.on('touchstart', eventStart);
+
+        function eventStart (event) {
           event.preventDefault();
           startX = event.screenX - x;
           $document.on('mousemove', mousemove);
           $document.on('mouseup', mouseup);
-        });
+          $document.on('touchmove', mousemove);
+          $document.on('touchend', mouseup);
+        };
 
         function calcX(x) {
           return x / scope.$parent.container[0].clientWidth * 100;
@@ -100,7 +130,6 @@ angular.module('ceSlider')
             if(calcX(tempX) < 0) {
               x = 0;
             } else if(calcX(tempX) > 100) {
-              console.log('hit!');
               x = unCalcX(100);
             }
 
@@ -110,21 +139,19 @@ angular.module('ceSlider')
             left: calcX(x) + '%'
           });
 
+          $timeout(function () {
+            scope.$parent[scope.model] = scope.$parent.data[Math.floor(scope.$parent.data.length * calcX(x) / 100.01)];
+            scope.value = scope.$parent[scope.model];
+          },0);
+
         }
 
         function mouseup() {
           $document.off('mousemove', mousemove);
           $document.off('mouseup', mouseup);
+          $document.off('touchmove', mousemove);
+          $document.off('touchend', mouseup);
         }
-
-        function windowResize(event) {
-          x = unCalcX(element.css('left').replace('%',''));
-          element.triggerHandler('mousedown');
-          element.triggerHandler('mousemove');
-          element.triggerHandler('mouseup');
-        }
-
-        window.onresize = windowResize;
 
       }
     };

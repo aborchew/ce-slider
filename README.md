@@ -15,15 +15,11 @@ Clone and run locally:
  * `$ bower install`
  * `$ grunt serve`
 
----------------
-
 #To Do
 
  * Make it mobile friendly
  * Write tests
 
----------------
-
 #Known Issues
 
- * Odd jumpiness, specifically on lower value slider after window resize.
+ * ~~Odd jumpiness, specifically on lower value slider after window resize.~~

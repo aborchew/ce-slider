@@ -3,7 +3,7 @@ ce-slider
 
 A minimalist, mobile friendly and customizable Angular.js directive for value and range sliders.
 
-Demo: [aborchew.github.io](aborchew.github.io/ce-slider)
+Demo: [aborchew.github.io](http://aborchew.github.io/ce-slider)
 
 ---------------
 

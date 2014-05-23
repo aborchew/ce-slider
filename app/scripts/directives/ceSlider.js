@@ -4,7 +4,7 @@ angular.module('ceSlider')
 
   .directive('ceSlider', function () {
     return {
-      templateUrl: '/partials/ceSlider.html',
+      templateUrl: 'partials/ceSlider.html',
       restrict: 'E',
       scope: {
         'model': '=ceModel',
@@ -89,7 +89,7 @@ angular.module('ceSlider')
 
         function eventStart (event) {
           event.preventDefault();
-          startX = event.screenX - x;
+          startX = (event.screenX || event.pageX) - x;
           $document.on('mousemove', mousemove);
           $document.on('mouseup', mouseup);
           $document.on('touchmove', mousemove);
@@ -106,7 +106,9 @@ angular.module('ceSlider')
 
         function mousemove(event) {
 
-          var tempX = event.screenX - startX;
+          console.log(event);
+
+          var tempX = (event.screenX || event.pageX) - startX;
 
           if(calcX(tempX) >= 0 && calcX(tempX) <= 100) {
 

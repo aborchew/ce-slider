@@ -2,10 +2,8 @@
   "name": "d3",
   "version": "0.0.0",
   "dependencies": {
-    "angular": "1.2.15",
-    "d3": "~3.4.8"
+    "angular": "1.2.15"
   },
   "devDependencies": {
-    "d3": "~3.4.8"
   }
 }

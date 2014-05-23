@@ -1,0 +1,93 @@
+<div class="drag-area">
+  <div class="label-min" ng-bind="minPossible"></div>
+  <div class="label-max" ng-bind="maxPossible"></div>
+  <div drag-handle="min" class="drag-handle">MIN</div>
+  <div drag-handle="max" class="drag-handle">MAX</div>
+</div>
+
+<style>
+
+body {
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.drag-area {
+  position: relative;
+  height: 35px;
+  display: block;
+  margin: 0 50px;
+}
+
+.drag-area:before {
+  content: "";
+  position: absolute;
+  top: 23px;
+  right: 0px;
+  bottom: auto;
+  left: 0px;
+  margin: 0;
+  border-bottom: 1px solid red;
+}
+
+.drag-handle {
+  cursor: pointer;
+  position: absolute;
+  line-height: 18px;
+  font-size: 10px;
+  font-weight: bold;
+  color: white;
+  text-align: center;
+  background: black;
+  width: 80px;
+  margin: 0 0 0 -40px;
+  border-radius: 3px;
+}
+
+  .drag-handle:after {
+    content: "";
+    width: 0;
+    height: 0;
+    position: absolute;
+    bottom: -8px;
+    left: 50%;
+    margin: 0 0 0 -4px;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-top: 8px solid black;
+  }
+
+  .drag-handle:active {
+    background: green;
+  }
+
+  .drag-handle:active:after {
+    border-top-color: green;
+  }
+
+  .label-min,
+  .label-max {
+    position: absolute;
+    left: -40px;
+    top: 30px;
+    width: 80px;
+    text-align: center;
+  }
+
+  .label-max {
+    left: auto;
+    right: -40px;
+  }
+
+  .label-min:before,
+  .label-max:before {
+    content: "";
+    display: block;
+    position: absolute;
+    width: 1px;
+    height: 11px;
+    background: red;
+    left: 50%;
+    top: -12px;
+  }
+
+</style>

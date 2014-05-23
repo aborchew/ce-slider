@@ -78,16 +78,16 @@ module.exports = function (grunt) {
           ]
         }
       },
-      test: {
-        options: {
-          port: 9001,
-          base: [
-            '.tmp',
-            'test',
-            '<%= yeoman.app %>'
-          ]
-        }
-      },
+      // test: {
+      //   options: {
+      //     port: 9001,
+      //     base: [
+      //       '.tmp',
+      //       'test',
+      //       '<%= yeoman.app %>'
+      //     ]
+      //   }
+      // },
       dist: {
         options: {
           base: '<%= yeoman.dist %>'
@@ -105,12 +105,12 @@ module.exports = function (grunt) {
         'Gruntfile.js',
         '<%= yeoman.app %>/scripts/{,*/}*.js'
       ],
-      test: {
-        options: {
-          jshintrc: 'test/.jshintrc'
-        },
-        src: ['test/spec/{,*/}*.js']
-      }
+      // test: {
+      //   options: {
+      //     jshintrc: 'test/.jshintrc'
+      //   },
+      //   src: ['test/spec/{,*/}*.js']
+      // }
     },
 
     // Empties folders to start fresh
@@ -329,9 +329,9 @@ module.exports = function (grunt) {
       server: [
         'compass:server'
       ],
-      test: [
-        'compass'
-      ],
+      // test: [
+      //   'compass'
+      // ],
       dist: [
         'compass:dist',
         'imagemin',
@@ -366,12 +366,12 @@ module.exports = function (grunt) {
     // },
 
     // Test settings
-    karma: {
-      unit: {
-        configFile: 'karma.conf.js',
-        singleRun: true
-      }
-    }
+    // karma: {
+    //   unit: {
+    //     configFile: 'karma.conf.js',
+    //     singleRun: true
+    //   }
+    // }
   });
 
 
@@ -395,13 +395,13 @@ module.exports = function (grunt) {
     grunt.task.run(['serve:' + target]);
   });
 
-  grunt.registerTask('test', [
-    'clean:server',
-    'concurrent:test',
-    'autoprefixer',
-    'connect:test',
-    'karma'
-  ]);
+  // grunt.registerTask('test', [
+  //   'clean:server',
+  //   'concurrent:test',
+  //   'autoprefixer',
+  //   'connect:test',
+  //   'karma'
+  // ]);
 
   grunt.registerTask('build', [
     'clean:dist',
@@ -421,8 +421,8 @@ module.exports = function (grunt) {
   ]);
 
   grunt.registerTask('default', [
-    'newer:jshint',
-    'test',
+    // 'newer:jshint',
+    // 'test',
     'build'
   ]);
 };

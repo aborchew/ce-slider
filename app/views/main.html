@@ -1,60 +1,10 @@
-<div class="drag-area">
-  <div class="drag-item" draggable="min">MIN</div>
-  <div class="drag-item" draggable="max">MAX</div>
-</div>
+<ce-slider
+  ce-model="lowValue"
+  ce-model-max="highValue"
+  ce-data="testData"
+  ce-slider-type="range"
+></ce-slider>
 
-<style>
-
-.drag-area {
-  position: relative;
-  /*overflow: hidden;*/
-  height: 25px;
-  display: block;
-}
-
-.drag-area:before {
-  content: "";
-  position: absolute;
-  top: 23px;
-  right: 40px;
-  bottom: auto;
-  left: 40px;
-  margin: 0;
-  border-bottom: 1px solid red;
-}
-
-.drag-item {
-  cursor: pointer;
-  position: absolute;
-  line-height: 18px;
-  font-size: 10px;
-  font-weight: bold;
-  color: white;
-  text-align: center;
-  background: black;
-  width: 80px;
-  border-radius: 3px;
-}
-
-  .drag-item:after {
-    content: "";
-    width: 0;
-    height: 0;
-    position: absolute;
-    bottom: -8px;
-    left: 50%;
-    margin: 0 0 0 -4px;
-    border-left: 5px solid transparent;
-    border-right: 5px solid transparent;
-    border-top: 8px solid black;
-  }
-
-  .drag-item:active {
-    background: green;
-  }
-
-  .drag-item:active:after {
-    border-top-color: green;
-  }
-
-</style>
+<p>Data: {{testData}}</p>
+<p>Min: {{lowValue}}</p>
+<p>Max: {{highValue}}</p>

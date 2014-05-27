@@ -17,7 +17,7 @@ Clone and run locally:
 
 #To Do
 
- * Make it mobile friendly
+ * ~~Make it mobile friendly~~
  * Write tests
 
 #Known Issues

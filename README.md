@@ -15,10 +15,58 @@ Clone and run locally:
  * `$ bower install`
  * `$ grunt serve`
 
+#Directive API
+
+<table>
+    <thead>
+		<tr>
+        	<td><b>attribute</b></td>
+        	<td><b>Req'd</b></td>
+			<td><b>Summary</b></td>
+   		</tr>
+	</thead>
+	<tbody>
+		<tr>
+        	<td>ce-data</td>
+        	<td>Yes</td>
+			<td><i>&lt;Array&gt;</i> The data used to create the slider.</td>
+   		</tr>
+		<tr>
+        	<td>ce-model</td>
+        	<td>Yes</td>
+			<td><i>&lt;Object | String | Array&gt;</i> A model that exists on the current scope that will be updated as the minimum range slider is updated.</td>
+   		</tr>
+		<tr>
+        	<td>ce-model-max</td>
+        	<td>No</td>
+			<td><i>&lt;Object | String | Array&gt;</i> A model that exists on the current scope that will be updated as the maximum range slider is updated.</td>
+   		</tr>
+		<tr>
+        	<td>ce-ticks</td>
+        	<td>No</td>
+			<td><i>&lt;int | *&gt;</i> Either an integer (number of tick marks to render) or any other string to render one tick per element in <code>ce-data</code></td>
+   		</tr>
+		<tr>
+        	<td>ce-touching-class</td>
+        	<td>No</td>
+			<td><i>&lt;String&gt;</i> Class added to handle element when the handle in question is the current target of a mousedown or touch event</td>
+   		</tr>
+		<tr>
+        	<td>ce-dragging-class</td>
+        	<td>No</td>
+			<td><i>&lt;String&gt;</i> Class added to handle element when the handle in question is the current target of a mousemove or touchmove event</td>
+   		</tr>
+	</tbody>
+</table>
+
 #To Do
 
  * ~~Make it mobile friendly~~
  * Write tests
+ * Ensure single-slider version works well
+ * Test in IE8, Windows Phone
+ * Write better docs
+ * Eliminate Duplicates in Array input
 
 #Known Issues
 

@@ -10,9 +10,28 @@ angular.module('ceSlider')
         'model': '=ceModel',
         'modelMax': '=ceModelMax',
         'data': '=ceData',
-        'type': '@ceSliderType'
+        'type': '@ceSliderType',
+        'ticks': '@ceTicks'
       },
       link: function postLink(scope, element, attr) {
+
+        var tickCount = 0
+          , ticks = false
+          ;
+
+        if(scope.ticks && parseInt(scope.ticks)) {
+          ticks = true;
+          tickCount = parseInt(scope.ticks);
+        } else if(!!scope.ticks && scope.data && scope.data.length) {
+          ticks = true;
+          tickCount = scope.data.length
+        }
+
+        if(ticks) {
+          for(var i = 0 ; i < tickCount; i++) {
+            element.find('span').append('<div class="tick" style="left:' + 100/tickCount*i + '%;"></div>');
+          }
+        }
 
         var handles = function () {
           var hndls = [];
@@ -83,13 +102,15 @@ angular.module('ceSlider')
         }
 
         element.on('updatePosition', updatePosition);
-
         element.on('mousedown', eventStart);
         element.on('touchstart', eventStart);
 
         function eventStart (event) {
+          // for(var i in event) {
+          //   console.log(i + ': ' + event[i]);
+          // }
           event.preventDefault();
-          startX = (event.screenX || event.pageX) - x;
+          startX = (event.screenX || event.pageX || event.touches[0].pageX) - x;
           $document.on('mousemove', mousemove);
           $document.on('mouseup', mouseup);
           $document.on('touchmove', mousemove);
@@ -97,6 +118,7 @@ angular.module('ceSlider')
         };
 
         function calcX(x) {
+          // fakelog(x + '|' + scope.$parent.container[0].clientWidth);
           return x / scope.$parent.container[0].clientWidth * 100;
         }
 
@@ -106,9 +128,7 @@ angular.module('ceSlider')
 
         function mousemove(event) {
 
-          console.log(event);
-
-          var tempX = (event.screenX || event.pageX) - startX;
+          var tempX = (event.screenX || event.pageX || event.touches[0].pageX) - startX;
 
           if(calcX(tempX) >= 0 && calcX(tempX) <= 100) {
 
@@ -148,7 +168,7 @@ angular.module('ceSlider')
 
         }
 
-        function mouseup() {
+        function mouseup(event) {
           $document.off('mousemove', mousemove);
           $document.off('mouseup', mouseup);
           $document.off('touchmove', mousemove);

@@ -1,10 +1,32 @@
-<ce-slider
-  ce-model="lowValue"
-  ce-model-max="highValue"
-  ce-data="testData"
-  ce-slider-type="range"
-></ce-slider>
+<div class="filter-container">
+
+  <ce-slider
+    ce-model="lowValue"
+    ce-model-max="highValue"
+    ce-data="testData"
+    ce-slider-type="range"
+    ce-ticks="true"
+  ></ce-slider>
+
+</div>
 
 <p>Data: {{testData}}</p>
 <p>Min: {{lowValue}}</p>
 <p>Max: {{highValue}}</p>
+
+<pre id="console">Console...</pre>
+
+<style>
+
+  .filter-container {
+    display: block;
+    margin: 50px auto;
+    width: 300px;
+  }
+
+  pre {
+    overflow-y: scroll;
+    height: 270px;
+  }
+
+</style>

@@ -24,8 +24,17 @@ The HTML Markup on the page is as follows:
   ce-model="lowValue"
   ce-model-max="highValue"
   ce-ticks="true"
+  ce-drag-area-class="drag-area"
+  ce-label-class="value-label"
+  ce-label-max-class="value-label-max"
+  ce-drag-handle-class="drag-handle"
+  ce-drag-handle-max-class="drag-handle-max"
+  ce-tick-container-class="ticks"
+  ce-tick-class="tick"
   ce-touching-class="touching"
+  ce-touching-class-out-delay="0"
   ce-dragging-class="dragging"
+  ce-dragging-class-out-delay="0"
 >
 </ce-slider>
 ````
@@ -78,7 +87,7 @@ The HTML Markup on the page is as follows:
  * Write tests
  * Ensure single-slider version works well
  * Test in IE8, Windows Phone
- * Write better docs
+ * Document outstanding attributes
  * Eliminate Duplicates in Array input
 
 #Known Issues

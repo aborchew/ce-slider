@@ -39,6 +39,28 @@ The HTML Markup on the page is as follows:
 </ce-slider>
 ````
 
+Which will render (simplified) this:
+````HTML
+<div class="drag-area">
+  <span class="ticks">
+    <div class="tick" style="left:0%;"></div>
+    <div class="tick" style="left:10%;"></div>
+    <div class="tick" style="left:20%;"></div>
+    <div class="tick" style="left:30%;"></div>
+    <div class="tick" style="left:40%;"></div>
+    <div class="tick" style="left:50%;"></div>
+    <div class="tick" style="left:60%;"></div>
+    <div class="tick" style="left:70%;"></div>
+    <div class="tick" style="left:80%;"></div>
+    <div class="tick" style="left:90%;"></div>
+  </span>
+  <div class="value-label">0</div>
+  <div class="value-label value-label-max">9</div>
+  <div class="drag-handle">min</div>
+  <div class="drag-handle drag-handle-max">max</div>
+</div>
+````
+
 <table>
     <thead>
 		<tr>

@@ -17,6 +17,19 @@ Clone and run locally:
 
 #Directive API
 
+The HTML Markup on the page is as follows:
+````HTML
+<ce-slider
+  ce-data="testData"
+  ce-model="lowValue"
+  ce-model-max="highValue"
+  ce-ticks="true"
+  ce-touching-class="touching"
+  ce-dragging-class="dragging"
+>
+</ce-slider>
+````
+
 <table>
     <thead>
 		<tr>

@@ -2,7 +2,7 @@
 
 angular.module('ceSlider')
 
-  .directive('ceSlider', function ($document) {
+  .directive('ceSlider', function ($document, $timeout) {
     return {
       templateUrl: 'partials/ceSlider.html',
       restrict: 'E',
@@ -10,6 +10,7 @@ angular.module('ceSlider')
         'model': '=ceModel',
         'modelMax': '=ceModelMax',
         'data': '=ceData',
+        'snap': '=ceSnap',
         'ticks': '@ceTicks',
         'touchingClass': '@ceTouchingClass',
         'draggingClass': '@ceDraggingClass',
@@ -24,7 +25,8 @@ angular.module('ceSlider')
         'draggingClassOutDelay': '@ceDraggingClassOutDelay',
         'dragHandleContent': '@ceDragHandleContent',
         'dragHandleMaxContent': '@ceDragHandleMaxContent',
-        'snap': '@ceSnap'
+        'dragHandleOverlapClass': '@ceDragHandleOverlapClass',
+        'dragHandleOverlapMaxClass': '@ceDragHandleOverlapMaxClass'
       },
       link: function postLink(scope, element, attr) {
 
@@ -45,23 +47,23 @@ angular.module('ceSlider')
         scope.tickClass = scope.tickClass || 'tick';
         scope.touchingClassOutDelay = parseInt(scope.touchingClassOutDelay) || 0;
         scope.draggingClassOutDelay = parseInt(scope.draggingClassOutDelay) || 0;
+        scope.tickCount = 0;
 
-        var tickCount = 0
-          , ticks = false
+        var ticks = false
           , windowTimer
           ;
 
         if(scope.ticks && parseInt(scope.ticks)) {
           ticks = true;
-          tickCount = parseInt(scope.ticks);
+          scope.tickCount = parseInt(scope.ticks);
         } else if(!!scope.ticks && scope.data && scope.data.length) {
           ticks = true;
-          tickCount = scope.data.length
+          scope.tickCount = scope.data.length
         }
 
         if(ticks) {
-          for(var i = 0 ; i < tickCount; i++) {
-            element.find('span').append('<div class="' + scope.tickClass + '" style="left:' + 100/tickCount*i + '%;"></div>');
+          for(var i = 0 ; i < scope.tickCount; i++) {
+            element.find('span').append('<div class="' + scope.tickClass + '" style="left:' + 100/scope.tickCount*i + '%;"></div>');
           }
         }
 
@@ -69,7 +71,7 @@ angular.module('ceSlider')
           var hndls = [];
           var els = element.children().children();
           for(var i = 0, len = els.length; i < len; i++) {
-            if(angular.element(els[i]).attr('drag-handle')) {
+            if(angular.element(els[i]).attr(scope.dragHandleClass)) {
               hndls[hndls.length] = angular.element(els[i]);
             }
           }
@@ -79,13 +81,10 @@ angular.module('ceSlider')
         scope.container = angular.element(element.children()[0]);
         scope.handle = handles[0];
         scope.minPossible = Math.min.apply(null, scope.data);
-
-        if(!scope.modelMax) {
-          scope.handleMax.remove();
-        } else {
-          scope.handleMax = handles[1];
-          scope.maxPossible = Math.max.apply(null, scope.data);
-        }
+        scope.$parent[scope.model] = scope.minPossible;
+        scope.handleMax = handles[1];
+        scope.maxPossible = Math.max.apply(null, scope.data);
+        scope.$parent[scope.modelMax] = scope.maxPossible;
 
         function windowResize() {
           clearTimeout(windowTimer);
@@ -96,7 +95,7 @@ angular.module('ceSlider')
           },250);
         }
 
-        $document.onresize = windowResize;
+        window.onresize = windowResize;
 
       }
     };
@@ -106,14 +105,24 @@ angular.module('ceSlider')
     return {
       restrict: 'A',
       scope: {
-        'type': '@dragHandle'
+        'type': '@dragHandle',
+        'snap': '=ceSnap',
+        'touchingClass': '=ceTouchingClass',
+        'draggingClass': '=ceDraggingClass',
+        'touchingClassOutDelay': '=ceTouchingClassOutDelay',
+        'draggingClassOutDelay': '=ceDraggingClassOutDelay',
+        'dragHandleOverlapClass': '=ceDragHandleOverlapClass',
+        'dragHandleOverlapMaxClass': '=ceDragHandleOverlapMaxClass'
       },
       link: function postLink(scope, element, attr) {
 
         var startX = 0
           , x = 0
+          , handle
+          , handleMax
           , touchingClassOutTimer
           , draggingClassOutTimer
+          , ticks = []
           ;
 
         if(scope.type == 'max') {
@@ -128,6 +137,13 @@ angular.module('ceSlider')
         } else {
           scope.model = 'model';
         }
+
+        $timeout(function () {
+          scope.$parent[scope.model] = scope.$parent.data[Math.floor(scope.$parent.data.length * calcX(x) / 100.01)];
+          scope.value = scope.$parent[scope.model];
+          handle = scope.$parent.handle
+          handleMax = scope.$parent.handleMax
+        },0);
 
         // http://www.quirksmode.org/dom/getstyles.html
         function getStyle(styleProp) {
@@ -147,6 +163,12 @@ angular.module('ceSlider')
           return 0;
         }
 
+        if(!!scope.snap) {
+          $timeout(function () {
+            ticks = element.parent().children().children();
+          }, 100);
+        }
+
         function updatePosition () {
           x = unCalcX(element.css('left').replace('%',''));
           $document.triggerHandler('mousedown');
@@ -160,7 +182,7 @@ angular.module('ceSlider')
 
         function eventStart (event) {
           event.preventDefault();
-          element.addClass(scope.$parent.touchingClass);
+          element.addClass(scope.touchingClass);
           startX = (event.screenX || event.pageX || isAndroid(event)) - x;
           $document.on('mousemove', mousemove);
           $document.on('mouseup', mouseup);
@@ -180,16 +202,16 @@ angular.module('ceSlider')
 
         function mousemove(event) {
 
-          element.addClass(scope.$parent.draggingClass);
+          element.addClass(scope.draggingClass);
           clearTimeout(draggingClassOutTimer);
           draggingClassOutTimer = setTimeout(function () {
-            element.removeClass(scope.$parent.draggingClass);
-          }, scope.$parent.draggingClassOutDelay);
+            element.removeClass(scope.draggingClass);
+          }, scope.draggingClassOutDelay);
 
           var tempX = (event.screenX || event.pageX || isAndroid(event)) - startX
             , cX = calcX(tempX)
-            , minL = unCalcX(scope.$parent.handle.css('left').replace('%',''))
-            , maxL = unCalcX(scope.$parent.handleMax.css('left').replace('%',''))
+            , minL = unCalcX(handle.css('left').replace('%',''))
+            , maxL = unCalcX(handleMax.css('left').replace('%',''))
             ;
 
           if(cX >= 0 && cX <= 100) {
@@ -216,6 +238,11 @@ angular.module('ceSlider')
 
           }
 
+          if(!!scope.snap) {
+            var tickIndex = Math.round(scope.$parent.data.length * calcX(x) / 100.01);
+            x = ticks[tickIndex] ? ticks[tickIndex].offsetLeft : unCalcX(100);
+          }
+
           element.css({
             left: calcX(x) + '%'
           });
@@ -225,25 +252,41 @@ angular.module('ceSlider')
             scope.value = scope.$parent[scope.model];
           },0);
 
+          if(handle[0].offsetWidth + handle[0].offsetLeft >= handleMax[0].offsetLeft) {
+            handle.addClass(scope.dragHandleOverlapClass);
+            handleMax.addClass(scope.dragHandleOverlapClass);
+            handleMax.addClass(scope.dragHandleOverlapMaxClass);
+          } else {
+            handle.removeClass(scope.dragHandleOverlapClass);
+            handleMax.removeClass(scope.dragHandleOverlapClass);
+            handleMax.removeClass(scope.dragHandleOverlapMaxClass);
+          }
+
         }
 
         function mouseup(event) {
 
           clearTimeout(touchingClassOutTimer);
           touchingClassOutTimer = setTimeout(function () {
-            element.removeClass(scope.$parent.touchingClass);
-          }, scope.$parent.touchingClassOutDelay);
+            element.removeClass(scope.touchingClass);
+          }, scope.touchingClassOutDelay);
 
           clearTimeout(draggingClassOutTimer);
           draggingClassOutTimer = setTimeout(function () {
-            element.removeClass(scope.$parent.draggingClass);
-          }, scope.$parent.draggingClassOutDelay);
+            element.removeClass(scope.draggingClass);
+          }, scope.draggingClassOutDelay);
 
           $document.off('mousemove', mousemove);
           $document.off('mouseup', mouseup);
           $document.off('touchmove', mousemove);
           $document.off('touchend', mouseup);
         }
+
+        scope.$watch(function () {
+          return scope.snap;
+        }, function () {
+          updatePosition();
+        })
 
       }
     };

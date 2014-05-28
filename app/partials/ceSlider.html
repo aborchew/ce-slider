@@ -1,7 +1,47 @@
 <div ng-class="dragAreaClass">
-  <span ng-class="tickContainerClass"></span>
-  <div ng-class="labelClass" ng-bind="minPossible"></div>
-  <div ng-class="labelClass + ' ' + labelMaxClass" ng-bind="maxPossible"></div>
-  <div drag-handle="min" ng-class="dragHandleClass" ng-bind="dragHandleContent"></div>
-  <div drag-handle="max" ng-class="dragHandleClass + ' ' + dragHandleMaxClass" ng-bind="dragHandleMaxContent || dragHandleContent"></div>
+
+  <span ng-class="tickContainerClass">
+  </span>
+
+  <div
+    ng-class="labelClass"
+    ng-bind="minPossible"
+  >
+  </div>
+
+  <div
+    ng-class="labelClass + ' ' + labelMaxClass"
+    ng-bind="maxPossible"
+  >
+  </div>
+
+  <a
+    href=""
+    drag-handle="min"
+    ng-class="dragHandleClass"
+    ng-bind="dragHandleContent"
+    ce-snap="snap"
+    ce-touching-class="touchingClass"
+    ce-dragging-class="draggingClass"
+    ce-touching-class-out-delay="touchingClassOutDelay"
+    ce-dragging-class-out-delay="draggingClassOutDelay"
+    ce-drag-handle-overlap-class="dragHandleOverlapClass"
+    ce-drag-handle-overlap-max-class="dragHandleOverlapMaxClass"
+  >
+  </a>
+
+  <a
+    href=""
+    drag-handle="max"
+    ng-class="dragHandleClass + ' ' + dragHandleMaxClass"
+    ng-bind="dragHandleMaxContent || dragHandleContent"
+    ce-snap="snap"
+    ce-touching-class="touchingClass"
+    ce-dragging-class="draggingClass"
+    ce-touching-class-out-delay="touchingClassOutDelay"
+    ce-dragging-class-out-delay="draggingClassOutDelay"
+    ce-drag-handle-overlap-class="dragHandleOverlapClass"
+    ce-drag-handle-overlap-max-class="dragHandleOverlapMaxClass"
+  >
+  </a>
 </div>

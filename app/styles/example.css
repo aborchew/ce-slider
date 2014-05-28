@@ -1,0 +1,150 @@
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  padding: 0;
+  margin: 0;
+  -moz-user-select: none; 
+  -khtml-user-select: none; 
+  -webkit-user-select: none; 
+  -o-user-select: none; 
+}
+
+.filter-container {
+  display: block;
+  margin: 50px;
+}
+
+.drag-area {
+  position: relative;
+  height: 35px;
+  display: block;
+  margin: 0 0;
+  text-align: left;
+}
+
+.drag-area:before {
+  content: "";
+  position: absolute;
+  top: 23px;
+  right: 0px;
+  bottom: auto;
+  left: 0px;
+  margin: 0;
+  border-bottom: 1px solid red;
+}
+
+.ticks {
+  position: absolute;
+  width: 100%;
+  height: 11px;
+  top: 18px;
+}
+
+.tick {
+  display: block;
+  position: absolute;
+  width: 1px;
+  height: 11px;
+  background: rgba(000,000,000,.25);
+}
+
+.drag-handle {
+  display: block;
+  position: absolute;
+  -webkit-transition-duration: .1s;
+  -webkit-transition-property: height, width, margin, background, border, border-radius;
+  -webkit-transition-timing-function: ease-in;
+  width: 30px;
+  height: 30px;
+  margin: -2px 0px 0px -24px;
+  border: 10px solid rgba(000,000,000,0);
+  border-radius: 25px;
+  -ms-touch-action: none;
+  touch-action: none;
+}
+
+.drag-handle:after {
+  content: "";
+  display: block;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 10px;
+  height: 10px;
+  margin: -5px 0 0 -5px;
+  background: rgba(174, 65, 58, 1);
+  border-radius: 5px;
+}
+
+.drag-handle.overlapping:after {
+  height: 0;
+  width: 0;
+  border: none;
+  margin: -8px 0 0 -13px;
+  background: none;
+  border-top: 9px solid transparent;
+  border-left: 14px solid rgba(174, 65, 58, 1);;
+  border-bottom: 9px solid transparent;
+}
+
+.drag-handle.overlapping-max:after {
+  height: 0;
+  width: 0;
+  border: none;
+  margin: -8px 0 0 0px;
+  background: none;
+  border-top: 9px solid transparent;
+  border-right: 14px solid rgba(174, 65, 58, 1);;
+  border-bottom: 9px solid transparent;
+}
+
+.drag-handle:hover {
+  background: white;
+  width: 12px;
+  height: 12px;
+  margin: 8px 0px 0px -14px;
+  border: 9px solid rgba(174, 65, 58, .5);
+}
+
+.drag-handle:hover:after {
+  background: rgba(29, 22, 29, 1);
+}
+
+.drag-handle.touching:after {
+  background: rgba(29, 22, 29, 1);
+  margin: -2px 0 0 -2px;
+  width: 4px;
+  height: 4px;
+  border-radius: 2px;
+}
+
+.drag-handle.touching {
+  background: white;
+  border: 9px solid rgba(174, 65, 58, 1);
+  width: 12px;
+  height: 12px;
+  margin: 8px 0px 0px -14px;
+}
+
+.value-label {
+  position: absolute;
+  left: -40px;
+  top: 30px;
+  width: 80px;
+  text-align: center;
+}
+
+.value-label-max {
+  left: auto;
+  right: -40px;
+}
+
+.value-label:before {
+  content: "";
+  display: block;
+  position: absolute;
+  width: 1px;
+  height: 11px;
+  background: red;
+  left: 50%;
+  top: -12px;
+}

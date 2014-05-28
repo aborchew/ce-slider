@@ -119,3 +119,5 @@ Which will render (simplified) this (assuming an Array of 10 data points):
 #Known Issues
 
  * ~~Odd jumpiness, specifically on lower value slider after window resize.~~
+ * Sliders grandfathered in to non-snap mode can be over-dragged
+ * left side and first tick are same values

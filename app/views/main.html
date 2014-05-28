@@ -1,12 +1,25 @@
 <div class="filter-container">
 
-  <ce-slider
-    ce-model="lowValue"
-    ce-model-max="highValue"
-    ce-data="testData"
-    ce-slider-type="range"
-    ce-ticks="true"
-  ></ce-slider>
+<ce-slider
+  ce-data="testData"
+  ce-model="lowValue"
+  ce-model-max="highValue"
+  ce-ticks="true"
+  ce-drag-area-class="drag-area"
+  ce-label-class="value-label"
+  ce-label-max-class="value-label-max"
+  ce-drag-handle-class="drag-handle"
+  ce-drag-handle-content="min"
+  ce-drag-handle-max-class="drag-handle-max"
+  ce-drag-handle-max-content="max"
+  ce-tick-container-class="ticks"
+  ce-tick-class="tick"
+  ce-touching-class="touching"
+  ce-touching-class-out-delay="0"
+  ce-dragging-class="dragging"
+  ce-dragging-class-out-delay="0"
+>
+</ce-slider>
 
 </div>
 
@@ -14,9 +27,13 @@
 <p>Min: {{lowValue}}</p>
 <p>Max: {{highValue}}</p>
 
-<pre id="console">Console...</pre>
-
 <style>
+
+  body {
+    font-family: Arial, Helvetica, sans-serif;
+    padding: 0;
+    margin: 0;
+  }
 
   .filter-container {
     display: block;
@@ -24,9 +41,108 @@
     width: 300px;
   }
 
-  pre {
-    overflow-y: scroll;
-    height: 270px;
+  .drag-area {
+    position: relative;
+    height: 35px;
+    display: block;
+    margin: 0 0;
+  }
+
+  .drag-area:before {
+    content: "";
+    position: absolute;
+    top: 23px;
+    right: 0px;
+    bottom: auto;
+    left: 0px;
+    margin: 0;
+    border-bottom: 1px solid red;
+  }
+
+  .ticks {
+    position: absolute;
+    width: 100%;
+    height: 11px;
+    top: 18px;
+  }
+
+  .tick {
+    display: block;
+    position: absolute;
+    width: 1px;
+    height: 11px;
+    background: rgba(000,000,000,.25);
+  }
+
+  .drag-handle {
+    cursor: pointer;
+    position: absolute;
+    line-height: 18px;
+    font-size: 10px;
+    font-weight: bold;
+    color: white;
+    text-align: center;
+    background: black;
+    width: 80px;
+    margin: 0 0 0 -40px;
+    border-radius: 3px;
+    -ms-touch-action: none;
+    touch-action: none;
+  }
+
+  .drag-handle:after {
+    content: "";
+    width: 0;
+    height: 0;
+    position: absolute;
+    bottom: -8px;
+    left: 50%;
+    margin: 0 0 0 -4px;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-top: 8px solid black;
+  }
+
+  .drag-handle:active,
+  .drag-handle.touching {
+    background: green;
+  }
+
+  .drag-handle:active:after,
+  .drag-handle.touching:after {
+    border-top-color: green;
+  }
+
+  .drag-handle.dragging {
+    background: orange;
+  }
+
+   .drag-handle.dragging:after {
+    border-top-color: orange;
+   }
+
+  .value-label {
+    position: absolute;
+    left: -40px;
+    top: 30px;
+    width: 80px;
+    text-align: center;
+  }
+
+  .value-label-max {
+    left: auto;
+    right: -40px;
+  }
+
+  .value-label:before {
+    content: "";
+    display: block;
+    position: absolute;
+    width: 1px;
+    height: 11px;
+    background: red;
+    left: 50%;
+    top: -12px;
   }
 
 </style>

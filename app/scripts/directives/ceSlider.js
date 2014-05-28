@@ -10,10 +10,40 @@ angular.module('ceSlider')
         'model': '=ceModel',
         'modelMax': '=ceModelMax',
         'data': '=ceData',
-        'type': '@ceSliderType',
-        'ticks': '@ceTicks'
+        'ticks': '@ceTicks',
+        'touchingClass': '@ceTouchingClass',
+        'draggingClass': '@ceDraggingClass',
+        'dragAreaClass': '@ceDragAreaClass',
+        'labelClass': '@ceLabelClass',
+        'labelMaxClass': '@ceLabelMaxClass',
+        'dragHandleClass': '@ceDragHandleClass',
+        'dragHandleMaxClass': '@ceDragHandleMaxClass',
+        'tickContainerClass': '@ceTickContainerClass',
+        'tickClass': '@ceTickClass',
+        'touchingClassOutDelay': '@ceTouchingClassOutDelay',
+        'draggingClassOutDelay': '@ceDraggingClassOutDelay',
+        'dragHandleContent': '@ceDragHandleContent',
+        'dragHandleMaxContent': '@ceDragHandleMaxContent'
       },
       link: function postLink(scope, element, attr) {
+
+        if(!scope.data) {
+          throw new Error('Do you even data, bro?');
+        }
+
+        // Isolate scope, drunk ass.
+
+        scope.touchingClass = scope.touchingClass || 'touching';
+        scope.draggingClass = scope.draggingClass || 'dragging';
+        scope.dragAreaClass = scope.dragAreaClass || 'drag-area';
+        scope.labelClass = scope.labelClass || 'value-label';
+        scope.labelMaxClass = scope.labelMaxClass || 'value-label-max';
+        scope.dragHandleClass = scope.dragHandleClass || 'drag-handle';
+        scope.dragHandleMaxClass = scope.dragHandleMaxClass || 'drag-handle-max';
+        scope.tickContainerClass = scope.tickContainerClass || 'tick-container';
+        scope.tickClass = scope.tickClass || 'tick';
+        scope.touchingClassOutDelay = parseInt(scope.touchingClassOutDelay) || 0;
+        scope.draggingClassOutDelay = parseInt(scope.draggingClassOutDelay) || 0;
 
         var tickCount = 0
           , ticks = false
@@ -29,7 +59,7 @@ angular.module('ceSlider')
 
         if(ticks) {
           for(var i = 0 ; i < tickCount; i++) {
-            element.find('span').append('<div class="tick" style="left:' + 100/tickCount*i + '%;"></div>');
+            element.find('span').append('<div class="' + scope.tickClass + '" style="left:' + 100/tickCount*i + '%;"></div>');
           }
         }
 
@@ -48,7 +78,7 @@ angular.module('ceSlider')
         scope.handle = handles[0];
         scope.minPossible = Math.min.apply(null, scope.data);
 
-        if(scope.type != 'range') {
+        if(!scope.modelMax) {
           scope.handleMax.remove();
         } else {
           scope.handleMax = handles[1];
@@ -82,6 +112,8 @@ angular.module('ceSlider')
 
         var startX = 0
           , x = 0
+          , touchingClassOutTimer
+          , draggingClassOutTimer
           ;
 
         if(scope.type == 'max') {
@@ -106,10 +138,8 @@ angular.module('ceSlider')
         element.on('touchstart', eventStart);
 
         function eventStart (event) {
-          // for(var i in event) {
-          //   console.log(i + ': ' + event[i]);
-          // }
           event.preventDefault();
+          element.addClass(scope.$parent.touchingClass);
           startX = (event.screenX || event.pageX || event.touches[0].pageX) - x;
           $document.on('mousemove', mousemove);
           $document.on('mouseup', mouseup);
@@ -118,7 +148,6 @@ angular.module('ceSlider')
         };
 
         function calcX(x) {
-          // fakelog(x + '|' + scope.$parent.container[0].clientWidth);
           return x / scope.$parent.container[0].clientWidth * 100;
         }
 
@@ -128,12 +157,20 @@ angular.module('ceSlider')
 
         function mousemove(event) {
 
-          var tempX = (event.screenX || event.pageX || event.touches[0].pageX) - startX;
+          element.addClass(scope.$parent.draggingClass);
+          clearTimeout(draggingClassOutTimer);
+          draggingClassOutTimer = setTimeout(function () {
+            element.removeClass(scope.$parent.draggingClass);
+          }, scope.$parent.draggingClassOutDelay);
 
-          if(calcX(tempX) >= 0 && calcX(tempX) <= 100) {
+          // Android is yucky... Desktop || iOS || Android
+          var tempX = (event.screenX || event.pageX || event.touches[0].pageX) - startX
+            , cX = calcX(tempX)
+            , minL = unCalcX(scope.$parent.handle.css('left').replace('%',''))
+            , maxL = unCalcX(scope.$parent.handleMax.css('left').replace('%',''))
+            ;
 
-            var minL = unCalcX(scope.$parent.handle.css('left').replace('%',''));
-            var maxL = unCalcX(scope.$parent.handleMax.css('left').replace('%',''));
+          if(cX >= 0 && cX <= 100) {
 
             if(scope.type == 'min' && tempX <= maxL) {
               x = tempX;
@@ -149,9 +186,9 @@ angular.module('ceSlider')
 
           } else {
 
-            if(calcX(tempX) < 0) {
+            if(cX < 0 && scope.type == 'min') {
               x = 0;
-            } else if(calcX(tempX) > 100) {
+            } else if(cX > 100 && scope.type == 'max') {
               x = unCalcX(100);
             }
 
@@ -169,6 +206,14 @@ angular.module('ceSlider')
         }
 
         function mouseup(event) {
+          clearTimeout(touchingClassOutTimer);
+          touchingClassOutTimer = setTimeout(function () {
+            element.removeClass(scope.$parent.touchingClass);
+          }, scope.$parent.touchingClassOutDelay);
+          clearTimeout(draggingClassOutTimer);
+          draggingClassOutTimer = setTimeout(function () {
+            element.removeClass(scope.$parent.draggingClass);
+          }, scope.$parent.draggingClassOutDelay);
           $document.off('mousemove', mousemove);
           $document.off('mouseup', mouseup);
           $document.off('touchmove', mousemove);

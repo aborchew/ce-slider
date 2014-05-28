@@ -28,18 +28,21 @@ The HTML Markup on the page is as follows:
   ce-label-class="value-label"
   ce-label-max-class="value-label-max"
   ce-drag-handle-class="drag-handle"
+  ce-drag-handle-content="min"
   ce-drag-handle-max-class="drag-handle-max"
+  ce-drag-handle-max-content="max"
   ce-tick-container-class="ticks"
   ce-tick-class="tick"
   ce-touching-class="touching"
   ce-touching-class-out-delay="0"
   ce-dragging-class="dragging"
   ce-dragging-class-out-delay="0"
+  ce-snap="true"
 >
 </ce-slider>
 ````
 
-Which will render (simplified) this:
+Which will render (simplified) this (assuming an Array of 10 data points):
 ````HTML
 <div class="drag-area">
   <span class="ticks">
@@ -105,12 +108,13 @@ Which will render (simplified) this:
 
 #To Do
 
- * ~~Make it mobile friendly~~
+ * ~~Make it mobile friendly~~ *Confirmed working on Android and iOS*
  * Write tests
  * Ensure single-slider version works well
- * Test in IE8, Windows Phone
+ * Test IE8, Windows Phone
  * Document outstanding attributes
  * Eliminate Duplicates in Array input
+ * Configure snap functionality
 
 #Known Issues
 

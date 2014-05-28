@@ -2,7 +2,7 @@
 
 angular.module('ceSlider')
 
-  .directive('ceSlider', function () {
+  .directive('ceSlider', function ($document) {
     return {
       templateUrl: 'partials/ceSlider.html',
       restrict: 'E',
@@ -23,7 +23,8 @@ angular.module('ceSlider')
         'touchingClassOutDelay': '@ceTouchingClassOutDelay',
         'draggingClassOutDelay': '@ceDraggingClassOutDelay',
         'dragHandleContent': '@ceDragHandleContent',
-        'dragHandleMaxContent': '@ceDragHandleMaxContent'
+        'dragHandleMaxContent': '@ceDragHandleMaxContent',
+        'snap': '@ceSnap'
       },
       link: function postLink(scope, element, attr) {
 
@@ -47,6 +48,7 @@ angular.module('ceSlider')
 
         var tickCount = 0
           , ticks = false
+          , windowTimer
           ;
 
         if(scope.ticks && parseInt(scope.ticks)) {
@@ -85,8 +87,6 @@ angular.module('ceSlider')
           scope.maxPossible = Math.max.apply(null, scope.data);
         }
 
-        var windowTimer;
-
         function windowResize() {
           clearTimeout(windowTimer);
           windowTimer = setTimeout(function () {
@@ -96,7 +96,7 @@ angular.module('ceSlider')
           },250);
         }
 
-        window.onresize = windowResize;
+        $document.onresize = windowResize;
 
       }
     };
@@ -120,10 +120,31 @@ angular.module('ceSlider')
           element.css({
             left: '100%'
           });
-          x = element[0].offsetLeft;
+          $timeout(function() {
+            x = element[0].offsetLeft - parseInt(getStyle('margin-left'));
+            startX = x;
+          }, 0);
           scope.model = 'modelMax';
         } else {
           scope.model = 'model';
+        }
+
+        // http://www.quirksmode.org/dom/getstyles.html
+        function getStyle(styleProp) {
+          var x = element[0];
+          if (x.currentStyle) {
+            var y = x.currentStyle[styleProp];
+          } else if (window.getComputedStyle) {
+            var y = document.defaultView.getComputedStyle(x,null).getPropertyValue(styleProp);
+          }
+          return y;
+        }
+
+        function isAndroid (event) {
+          if(event.touches && event.touches[0] && event.touches[0].pageX) {
+            return event.touches[0].pageX;
+          }
+          return 0;
         }
 
         function updatePosition () {
@@ -140,17 +161,19 @@ angular.module('ceSlider')
         function eventStart (event) {
           event.preventDefault();
           element.addClass(scope.$parent.touchingClass);
-          startX = (event.screenX || event.pageX || event.touches[0].pageX) - x;
+          startX = (event.screenX || event.pageX || isAndroid(event)) - x;
           $document.on('mousemove', mousemove);
           $document.on('mouseup', mouseup);
           $document.on('touchmove', mousemove);
           $document.on('touchend', mouseup);
         };
 
+        // Convert pixel offset to percentage
         function calcX(x) {
           return x / scope.$parent.container[0].clientWidth * 100;
         }
 
+        // Convert percentage to pixel offset
         function unCalcX(x) {
           return x * scope.$parent.container[0].clientWidth / 100;
         }
@@ -163,8 +186,7 @@ angular.module('ceSlider')
             element.removeClass(scope.$parent.draggingClass);
           }, scope.$parent.draggingClassOutDelay);
 
-          // Android is yucky... Desktop || iOS || Android
-          var tempX = (event.screenX || event.pageX || event.touches[0].pageX) - startX
+          var tempX = (event.screenX || event.pageX || isAndroid(event)) - startX
             , cX = calcX(tempX)
             , minL = unCalcX(scope.$parent.handle.css('left').replace('%',''))
             , maxL = unCalcX(scope.$parent.handleMax.css('left').replace('%',''))
@@ -206,14 +228,17 @@ angular.module('ceSlider')
         }
 
         function mouseup(event) {
+
           clearTimeout(touchingClassOutTimer);
           touchingClassOutTimer = setTimeout(function () {
             element.removeClass(scope.$parent.touchingClass);
           }, scope.$parent.touchingClassOutDelay);
+
           clearTimeout(draggingClassOutTimer);
           draggingClassOutTimer = setTimeout(function () {
             element.removeClass(scope.$parent.draggingClass);
           }, scope.$parent.draggingClassOutDelay);
+
           $document.off('mousemove', mousemove);
           $document.off('mouseup', mouseup);
           $document.off('touchmove', mousemove);

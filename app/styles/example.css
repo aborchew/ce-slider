@@ -105,7 +105,6 @@ body {
 }
 
 .drag-handle:hover {
-  background: white;
   margin: -1px 0px 0px -24px;
   border: 9px solid rgba(174, 65, 58, .5);
 }
@@ -149,7 +148,6 @@ body {
 }
 
 .drag-handle.touching {
-  background: white;
   border: 9px solid rgba(174, 65, 58, 1);
   width: 12px;
   height: 12px;

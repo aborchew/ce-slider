@@ -5,7 +5,7 @@ body {
   -moz-user-select: none; 
   -khtml-user-select: none; 
   -webkit-user-select: none; 
-  -o-user-select: none; 
+  -o-user-select: none;
 }
 
 .filter-container {
@@ -56,10 +56,27 @@ body {
   width: 30px;
   height: 30px;
   margin: -2px 0px 0px -24px;
-  border: 10px solid rgba(000,000,000,0);
+  border: 10px solid transparent;
   border-radius: 25px;
   -ms-touch-action: none;
   touch-action: none;
+  cursor: ew-resize;
+}
+
+.drag-handle.overlapping {
+  width: 15px;
+  border-radius: 25px 0 0 25px;
+  border-right: none;
+  margin: -2px 0px 0px -25px;
+  cursor: w-resize;
+}
+
+.drag-handle.overlapping-max {
+  border-radius: 0 25px 25px 0;
+  border-right: 10px solid transparent;
+  border-left: none;
+  margin: -2px 0px 0px 1px;
+  cursor: e-resize;
 }
 
 .drag-handle:after {
@@ -76,33 +93,35 @@ body {
 }
 
 .drag-handle.overlapping:after {
-  height: 0;
-  width: 0;
-  border: none;
-  margin: -8px 0 0 -13px;
-  background: none;
-  border-top: 9px solid transparent;
-  border-left: 14px solid rgba(174, 65, 58, 1);;
-  border-bottom: 9px solid transparent;
+  border-radius: 5px 0 0 5px;
+  width: 6px;
+  margin: -5px 0 0 0px;
 }
 
 .drag-handle.overlapping-max:after {
-  height: 0;
-  width: 0;
-  border: none;
-  margin: -8px 0 0 0px;
-  background: none;
-  border-top: 9px solid transparent;
-  border-right: 14px solid rgba(174, 65, 58, 1);;
-  border-bottom: 9px solid transparent;
+  border-radius: 0 5px 5px 0;
+  width: 6px;
+  margin: -5px 0 0 -7px;
 }
 
 .drag-handle:hover {
   background: white;
-  width: 12px;
-  height: 12px;
-  margin: 8px 0px 0px -14px;
+  margin: -1px 0px 0px -24px;
   border: 9px solid rgba(174, 65, 58, .5);
+}
+
+.drag-handle.overlapping:hover {
+  border-top: 9px solid rgba(174, 65, 58, .5);
+  border-left: 9px solid rgba(174, 65, 58, .5);
+  border-bottom: 9px solid rgba(174, 65, 58, .5);
+  border-right: none;
+  background: none;
+}
+
+.drag-handle.overlapping-max:hover {
+  border-right: 9px solid rgba(174, 65, 58, .5);
+  border-left: none;
+  margin: -1px 0px 0px 1px;
 }
 
 .drag-handle:hover:after {
@@ -117,12 +136,37 @@ body {
   border-radius: 2px;
 }
 
+.drag-handle.overlapping.touching:after {
+  width: 2px;
+  border-radius: 2px 0 0 2px;
+  margin: -2px 0 0 0px;
+}
+
+.drag-handle.overlapping-max.touching:after {
+  width: 2px;
+  border-radius: 0 2px 2px 0;
+  margin: -2px 0 0 -3px;
+}
+
 .drag-handle.touching {
   background: white;
   border: 9px solid rgba(174, 65, 58, 1);
   width: 12px;
   height: 12px;
   margin: 8px 0px 0px -14px;
+}
+
+.drag-handle.touching.overlapping {
+  width: 6px;
+  margin: 8px 0px 0px -15px;
+  border: 9px solid rgba(174, 65, 58, 1);
+  border-right: none;
+}
+
+.drag-handle.overlapping-max.touching {
+  margin: 8px 0px 0px 2px;
+  border: 9px solid rgba(174, 65, 58, 1);
+  border-left: none;
 }
 
 .value-label {

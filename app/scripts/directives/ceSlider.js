@@ -34,8 +34,6 @@ angular.module('ceSlider')
           throw new Error('Do you even data, bro?');
         }
 
-        // Isolate scope, drunk ass.
-
         scope.touchingClass = scope.touchingClass || 'touching';
         scope.draggingClass = scope.draggingClass || 'dragging';
         scope.dragAreaClass = scope.dragAreaClass || 'drag-area';
@@ -53,18 +51,24 @@ angular.module('ceSlider')
           , windowTimer
           ;
 
-        if(scope.ticks && parseInt(scope.ticks)) {
-          ticks = true;
+        if(parseInt(scope.ticks)) {
           scope.tickCount = parseInt(scope.ticks);
-        } else if(!!scope.ticks && scope.data && scope.data.length) {
-          ticks = true;
+        } else if(scope.data.length) {
           scope.tickCount = scope.data.length
+        }
+
+        if(scope.ticks) {
+          ticks = true;
         }
 
         if(ticks) {
           for(var i = 0 ; i < scope.tickCount; i++) {
             element.find('span').append('<div class="' + scope.tickClass + '" style="left:' + 100/scope.tickCount*i + '%;"></div>');
           }
+        } else {
+          $timeout(function () {
+            element.children().find('span').remove();
+          }, 100);
         }
 
         var handles = function () {
@@ -163,7 +167,7 @@ angular.module('ceSlider')
           return 0;
         }
 
-        if(!!scope.snap) {
+        if(!!scope.$parent.ticks) {
           $timeout(function () {
             ticks = element.parent().children().children();
           }, 100);
@@ -239,8 +243,8 @@ angular.module('ceSlider')
           }
 
           if(!!scope.snap) {
-            var tickIndex = Math.round(scope.$parent.data.length * calcX(x) / 100.01);
-            x = ticks[tickIndex] ? ticks[tickIndex].offsetLeft : unCalcX(100);
+            var tickIndex = Math.round(scope.$parent.tickCount * calcX(x) / 100.01);
+            x = unCalcX(tickIndex/scope.$parent.tickCount*100);
           }
 
           element.css({
@@ -281,12 +285,6 @@ angular.module('ceSlider')
           $document.off('touchmove', mousemove);
           $document.off('touchend', mouseup);
         }
-
-        scope.$watch(function () {
-          return scope.snap;
-        }, function () {
-          updatePosition();
-        })
 
       }
     };

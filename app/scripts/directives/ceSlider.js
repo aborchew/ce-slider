@@ -26,7 +26,8 @@ angular.module('ceSlider')
         'dragHandleContent': '@ceDragHandleContent',
         'dragHandleMaxContent': '@ceDragHandleMaxContent',
         'dragHandleOverlapClass': '@ceDragHandleOverlapClass',
-        'dragHandleOverlapMaxClass': '@ceDragHandleOverlapMaxClass'
+        'dragHandleOverlapMaxClass': '@ceDragHandleOverlapMaxClass',
+        'overlapThreshold': '@ceOverlapThreshold'
       },
       link: function postLink(scope, element, attr) {
 
@@ -256,7 +257,7 @@ angular.module('ceSlider')
             scope.value = scope.$parent[scope.model];
           },0);
 
-          if(handle[0].offsetWidth + handle[0].offsetLeft >= handleMax[0].offsetLeft) {
+          if(maxL - minL <= scope.$parent.overlapThreshold) {
             handle.addClass(scope.dragHandleOverlapClass);
             handleMax.addClass(scope.dragHandleOverlapClass);
             handleMax.addClass(scope.dragHandleOverlapMaxClass);

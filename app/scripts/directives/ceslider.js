@@ -13,9 +13,7 @@ angular.module('ceSliderApp')
       },
       link: {
         pre: function preLink(scope, element, attrs) {
-          if(!angular.isDefined(attrs.ceStep)) {
-            attrs.ceStep = 1;
-          }
+          
         },
         post: function postLink(scope, element, attrs) {
 
@@ -43,6 +41,10 @@ angular.module('ceSliderApp')
 
           if(scope.min >= scope.max) {
             throw new Error('Data range must include at least two unequal values.');
+          }
+
+          if(!angular.isDefined(scope.step)) {
+            console.log(scope.min, scope.max, 'no step!');
           }
 
           if(scope.max - scope.step <= scope.min) {

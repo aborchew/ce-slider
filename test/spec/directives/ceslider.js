@@ -92,17 +92,12 @@ describe('Directive: ceSlider', function () {
 
   });
 
-  describe('Should have a valid step provided, or 1 should be valid ', function () {
+  describe('If a step is provided, it should be valid', function () {
 
     it('should throw an error otherwise', inject(function ($compile) {
 
       expect(function () {
         var tmpElement = angular.element('<ce-slider ce-data="[0,1]" ce-value="foo" ce-step="3"></ce-slider>');
-        tmpElement = $compile(tmpElement)(rootScope);
-      }).toThrowError();
-
-      expect(function () {
-        var tmpElement = angular.element('<ce-slider ce-data="[0,.2,.5,.9]" ce-value="foo"></ce-slider>');
         tmpElement = $compile(tmpElement)(rootScope);
       }).toThrowError();
 

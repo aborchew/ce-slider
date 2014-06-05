@@ -14,6 +14,7 @@ module.exports = function(config) {
       'app/bower_components/angular/angular.js',
       'app/bower_components/angular-mocks/angular-mocks.js',
       'app/bower_components/angular-sanitize/angular-sanitize.js',
+      'app/partials/template.html',
       'node_modules/jasmine-expect/dist/jasmine-matchers.js',
       'app/scripts/*.js',
       'app/scripts/**/*.js',
@@ -49,6 +50,15 @@ module.exports = function(config) {
 
     // Continuous Integration mode
     // if true, it capture browsers, run tests and exit
-    singleRun: false
+    singleRun: false,
+
+    preprocessors: {
+      'app/partials/template.html': ['ng-html2js']
+    },
+
+    ngHtml2JsPreprocessor: {
+      moduleName: 'templates'
+    }
+
   });
 };
